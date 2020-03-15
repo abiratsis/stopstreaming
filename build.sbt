@@ -6,6 +6,7 @@ scalaVersion := "2.12.9"
 val sparkVersion = "2.4.5"
 
 resolvers += "bintray-spark-packages" at "https://dl.bintray.com/spark-packages/maven/"
+resolvers += "Artima Maven Repository" at "http://repo.artima.com/releases"
 
 libraryDependencies ++= Seq(
   "org.apache.spark"     %% "spark-core" % sparkVersion,
