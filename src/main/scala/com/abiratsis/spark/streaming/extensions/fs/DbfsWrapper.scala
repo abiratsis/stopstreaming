@@ -1,4 +1,4 @@
-package eu.toon.streaming.fs
+package com.abiratsis.spark.streaming.extensions.fs
 
 import com.databricks.dbutils_v1.DBUtilsHolder.dbutils
 

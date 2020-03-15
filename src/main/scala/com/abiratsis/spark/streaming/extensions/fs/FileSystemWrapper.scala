@@ -1,4 +1,4 @@
-package eu.toon.streaming.fs
+package com.abiratsis.spark.streaming.extensions.fs
 
 trait FileSystemWrapper {
   val stopDir: String

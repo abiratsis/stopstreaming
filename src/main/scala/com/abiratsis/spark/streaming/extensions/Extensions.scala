@@ -1,16 +1,13 @@
-package eu.toon.streaming
+package com.abiratsis.spark.streaming.extensions
 
 import java.util.concurrent.ThreadLocalRandom
-
-import eu.toon.streaming.fs._
 import org.apache.spark.sql.streaming.StreamingQuery
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 import scala.util.{Failure, Success}
 
 object extensions {
-
+  import fs._
   object FileSystemType extends Enumeration {
     val DBFS, LocalFileSystem = Value
   }
