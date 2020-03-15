@@ -1,25 +1,31 @@
-package eu.toon.streaming
+package com.abiratsis.spark.streaming.extensions
 
-import eu.toon.storage.schema.RawCsvSchema
-import eu.toon.test.SharedSparkSession.spark
-import org.apache.spark.sql.Encoders
-import org.scalatest.FlatSpec
 import java.io.File
 
-import scala.reflect.io.Directory
-import extensions._
+import com.abiratsis.spark.streaming.extensions.extensions._
+import org.apache.spark.sql.{Encoders, SparkSession}
+import org.scalatest.FlatSpec
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.reflect.io.Directory
 import scala.util.{Failure, Success}
 
-class FileSystemStopStreamingQueryTest extends FlatSpec {
-  import spark.implicits._
+case class RowData(c1 : Int, c2 : Int, c3: String)
 
-  private val tmpPath :String = "/tmp/eneco.streaming.toon.eu/csv_export_2019_12_11/"
+class FileSystemStopStreamingQueryTest extends FlatSpec {
+   lazy val spark = SparkSession
+      .builder()
+      .appName("test")
+      .master("local[*]")
+      .enableHiveSupport()
+      .getOrCreate()
+
+  import spark.implicits._
+  private val tmpPath :String = "/tmp/stop_streaming/"
 
   val sampleDataPath = this.getClass
-    .getResource("/stop_streaming/ACCEP-2019-12-11T000521.289Z-a6b29bb0-cc78-4f3c-a2e5-cc5f0c4e1af3.completed.csv")
+    .getResource("/stream_data.csv")
     .getPath()
 
   def cleanUpDir(path :String) : Unit = {
@@ -33,11 +39,11 @@ class FileSystemStopStreamingQueryTest extends FlatSpec {
 
     val streamingQuery = spark
       .readStream
-      .schema(Encoders.product[RawCsvSchema].schema)
+      .schema(Encoders.product[RowData].schema)
       .option("header", value = false)
       .option("delimiter", value = ";")
       .csv(new File(sampleDataPath).getParent)
-      .as[RawCsvSchema]
+      .as[RowData]
 
     val q = streamingQuery.writeStream
       .outputMode("append")
@@ -46,7 +52,7 @@ class FileSystemStopStreamingQueryTest extends FlatSpec {
       .option("path", tmpPath)
       .start()
 
-    val stopStreamingDir = "/tmp/eneco.streaming.toon.eu/stop_streaming/"
+    val stopStreamingDir = "/tmp/stop_streaming/"
     val stopStreamingPath = s"$stopStreamingDir/${q.id.toString}"
 
     // wait until stream processes some data
