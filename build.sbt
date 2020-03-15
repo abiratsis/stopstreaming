@@ -6,14 +6,12 @@ scalaVersion := "2.12.9"
 val sparkVersion = "2.4.5"
 
 resolvers += "bintray-spark-packages" at "https://dl.bintray.com/spark-packages/maven/"
-resolvers += "Artima Maven Repository" at "http://repo.artima.com/releases"
 
 libraryDependencies ++= Seq(
   "org.apache.spark"     %% "spark-core" % sparkVersion,
   "org.apache.spark"     %% "spark-sql"  % sparkVersion,
   "org.apache.spark"     %% "spark-hive" % sparkVersion,
   "org.scalatest" %% "scalatest" % "3.1.1" % "test",
-  "org.scalactic" %% "scalactic" % "3.1.1",
   "com.databricks" % "dbutils-api_2.11" % "0.0.4"
 )
 
