@@ -6,6 +6,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 import scala.util.{Failure, Success}
 
+/**
+ * Extensions for Spark streaming
+ */
 object extensions {
   import fs._
   object FileSystemType extends Enumeration {
@@ -13,7 +16,14 @@ object extensions {
   }
 
   implicit class FileSystemStopStreamingQuery(val self :StreamingQuery) extends AnyVal {
-
+    /**
+     * Extension method for StreamingQuery, it waits for an external call to delete the streaming file. When that happens it will call the stop method
+     * of the current StreamingQuery instance.
+     *
+     * @param streamStopDir dir to be watched
+     * @param jobName the job unique identifier/the file name
+     * @param fsType DBFS or LocalFileSystem
+     */
     def awaitExternalTermination(streamStopDir :String, jobName :String, fsType : FileSystemType.Value): Unit ={
 
       if(streamStopDir == null || streamStopDir.isEmpty)
@@ -58,5 +68,4 @@ object extensions {
       self.awaitTermination()
     }
   }
-
 }

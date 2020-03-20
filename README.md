@@ -10,11 +10,13 @@ The implementation extends the functionality of the build-in Spark class `Stream
 
 ## Usage
 
-Call `awaitExternalTermination` with the following arguments:
+Write your streaming program and eventually call `awaitExternalTermination` instead of `awaitTermination` with the following arguments:
 
 - streamStopDir: the directory to be watched
 - jobName: the name of the current job. This is used to name the file that will be saved at `streamStopDir`
 - fsType: one of the `[DBFS, LocalFileSystem]` 
+
+To stop the job execute `%fs rm -r your_path` from your Databricks notebook or CLI.
 
 ## Scala example
 
